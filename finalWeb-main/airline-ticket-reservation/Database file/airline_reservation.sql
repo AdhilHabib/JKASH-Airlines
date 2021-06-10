@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 28, 2017 at 04:09 AM
--- Server version: 10.1.28-MariaDB
--- PHP Version: 7.1.10
+-- Generation Time: May 03, 2021 at 07:22 PM
+-- Server version: 10.4.17-MariaDB
+-- PHP Version: 8.0.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -26,13 +25,14 @@ DELIMITER $$
 --
 -- Procedures
 --
+DROP PROCEDURE IF EXISTS `GetFlightStatistics`$$
 CREATE DEFINER=`Harry`@`localhost` PROCEDURE `GetFlightStatistics` (IN `j_date` DATE)  BEGIN
  select flight_no,departure_date,IFNULL(no_of_passengers, 0) as no_of_passengers,total_capacity from (
-select f.flight_no,f.departure_date,sum(t.no_of_passengers) as no_of_passengers,j.total_capacity 
-from flight_details f left join ticket_details t 
-on t.booking_status='CONFIRMED' 
-and t.flight_no=f.flight_no 
-and f.departure_date=t.journey_date 
+select f.flight_no,f.departure_date,sum(t.no_of_passengers) as no_of_passengers,j.total_capacity
+from flight_details f left join ticket_details t
+on t.booking_status='CONFIRMED'
+and t.flight_no=f.flight_no
+and f.departure_date=t.journey_date
 inner join jet_details j on j.jet_id=f.jet_id
 group by flight_no,journey_date) k where departure_date=j_date;
  END$$
@@ -45,6 +45,7 @@ DELIMITER ;
 -- Table structure for table `admin`
 --
 
+DROP TABLE IF EXISTS `admin`;
 CREATE TABLE `admin` (
   `admin_id` varchar(20) NOT NULL,
   `pwd` varchar(30) DEFAULT NULL,
@@ -66,6 +67,7 @@ INSERT INTO `admin` (`admin_id`, `pwd`, `staff_id`, `name`, `email`) VALUES
 -- Table structure for table `customer`
 --
 
+DROP TABLE IF EXISTS `customer`;
 CREATE TABLE `customer` (
   `customer_id` varchar(20) NOT NULL,
   `pwd` varchar(20) DEFAULT NULL,
@@ -85,31 +87,16 @@ INSERT INTO `customer` (`customer_id`, `pwd`, `name`, `email`, `phone_no`, `addr
 ('blah', 'blah blah', 'blah', 'blah@gmail.com', '993498570', 'blah'),
 ('charles', 'charles_pass', 'Charles', 'charles@gmail.com', '9090909090', 'Bangalore'),
 ('chirag008', 'chirag', 'Chirag G', 'chirag@gmail.com', '8080808080', 'Kuldlu Gate'),
-('harryroshan', 'passpasshello', 'Harry Roshan', 'harryroshan1997@gmai', '9845713736', '#381, 1st E Main,');
+('harryroshan', 'passpasshello', 'Harry Roshan', 'harryroshan1997@gmai', '9845713736', '#381, 1st E Main,'),
+('kris', '123', 'sdfs', 'asd', 'sdfs', 'sdfasd');
 
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `flight_details`
 --
-CREATE TABLE `parking_details` (
-  `spot_no` varchar(10) NOT NULL,
-  `type` varchar(20) DEFAULT NULL,
-  `price` varchar(20) DEFAULT NULL,
-  `available` int(5) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `flight_details`
---
-
-INSERT INTO `parking_details` (`spot_no`, `type`, `price`, `available`) VALUES
-('P101', 'regular', 40, 1),
-('P102', 'regular', 40, 1),
-('P103', 'regular', 40, 1),
-('P104', 'VIP', 70, 1),
-('P105', 'VIP', 70, 1);
-
+DROP TABLE IF EXISTS `flight_details`;
 CREATE TABLE `flight_details` (
   `flight_no` varchar(10) NOT NULL,
   `from_city` varchar(20) DEFAULT NULL,
@@ -130,11 +117,17 @@ CREATE TABLE `flight_details` (
 --
 
 INSERT INTO `flight_details` (`flight_no`, `from_city`, `to_city`, `departure_date`, `arrival_date`, `departure_time`, `arrival_time`, `seats_economy`, `seats_business`, `price_economy`, `price_business`, `jet_id`) VALUES
-('AA101', 'bangalore', 'mumbai', '2017-12-01', '2017-12-02', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001'),
-('AA102', 'bangalore', 'mumbai', '2017-12-01', '2017-12-01', '10:00:00', '12:00:00', 200, 73, 2500, 3000, '10002'),
-('AA103', 'bangalore', 'chennai', '2017-12-03', '2017-12-03', '17:00:00', '17:45:00', 150, 75, 1200, 1500, '10004'),
-('AA104', 'bangalore', 'mysore', '2017-12-04', '2017-12-04', '09:00:00', '09:17:00', 37, 4, 500, 750, '10003'),
-('AA106', 'bangalore', 'hyderabad', '2017-12-01', '2017-12-01', '13:00:00', '14:00:00', 150, 75, 3000, 3750, '10004');
+('AA099', 'Atlanta', 'Long Island', '2021-06-01', '2021-06-10', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001'),
+('AA100', 'Atlanta', 'Austin', '2021-06-04', '2021-06-14', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001'),
+('AA101', 'Atlanta', 'San Francisco', '2021-06-10', '2021-06-20', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001'),
+('AA102', 'Atlanta', 'Cancun', '2021-06-01', '2021-06-01', '10:00:00', '12:00:00', 200, 73, 2500, 3000, '10002'),
+('AA103', 'Atlanta', 'Los Angeles', '2021-06-03', '2021-06-03', '17:00:00', '17:45:00', 150, 75, 1200, 1500, '10004'),
+('AA104', 'Atlanta', 'Houston', '2021-07-04', '2021-07-04', '09:00:00', '09:17:00', 37, 4, 500, 750, '10003'),
+('AA105', 'Atlanta', 'Washington DC', '2021-07-10', '2021-07-10', '09:00:00', '10:20:00', 37, 4, 500, 750, '10003'),
+('AA106', 'Atlanta', 'Washington', '2021-07-01', '2021-07-01', '13:00:00', '14:00:00', 150, 75, 3000, 3750, '10004'),
+('AA196', 'Atlanta', 'New York City', '2021-05-01', '2021-05-10', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001'),
+('AA197', 'Atlanta', 'New Jersey', '2021-05-04', '2021-05-18', '21:00:00', '01:00:00', 191, 96, 5000, 7500, '10001'),
+('AA198', 'Atlanta', 'Boston', '2021-05-06', '2021-06-22', '21:00:00', '01:00:00', 195, 96, 5000, 7500, '10001');
 
 -- --------------------------------------------------------
 
@@ -142,6 +135,7 @@ INSERT INTO `flight_details` (`flight_no`, `from_city`, `to_city`, `departure_da
 -- Table structure for table `frequent_flier_details`
 --
 
+DROP TABLE IF EXISTS `frequent_flier_details`;
 CREATE TABLE `frequent_flier_details` (
   `frequent_flier_no` varchar(20) NOT NULL,
   `customer_id` varchar(20) DEFAULT NULL,
@@ -162,6 +156,7 @@ INSERT INTO `frequent_flier_details` (`frequent_flier_no`, `customer_id`, `milea
 -- Table structure for table `jet_details`
 --
 
+DROP TABLE IF EXISTS `jet_details`;
 CREATE TABLE `jet_details` (
   `jet_id` varchar(10) NOT NULL,
   `jet_type` varchar(20) DEFAULT NULL,
@@ -183,9 +178,35 @@ INSERT INTO `jet_details` (`jet_id`, `jet_type`, `total_capacity`, `active`) VAL
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `parking_details`
+--
+
+DROP TABLE IF EXISTS `parking_details`;
+CREATE TABLE `parking_details` (
+  `spot_no` varchar(10) NOT NULL,
+  `type` varchar(20) DEFAULT NULL,
+  `price` varchar(20) DEFAULT NULL,
+  `available` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `parking_details`
+--
+
+INSERT INTO `parking_details` (`spot_no`, `type`, `price`, `available`) VALUES
+('P101', 'regular', '40', 0),
+('P102', 'regular', '40', 1),
+('P103', 'regular', '40', 1),
+('P104', 'VIP', '70', 1),
+('P105', 'VIP', '70', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `passengers`
 --
 
+DROP TABLE IF EXISTS `passengers`;
 CREATE TABLE `passengers` (
   `passenger_id` int(10) NOT NULL,
   `pnr` varchar(15) NOT NULL,
@@ -205,9 +226,13 @@ INSERT INTO `passengers` (`passenger_id`, `pnr`, `name`, `age`, `gender`, `meal_
 (1, '2369143', 'blah', 20, 'male', 'yes', NULL),
 (1, '3027167', 'aadith_name', 10, 'male', 'yes', NULL),
 (1, '3773951', 'harry', 51, 'male', 'yes', NULL),
+(1, '4570873', 'Hana', 12, 'female', 'yes', NULL),
+(1, '4783875', 'Mr. PotatoeHead', 41, 'male', 'yes', '10001000'),
 (1, '4797983', 'pass1', 34, 'male', 'yes', NULL),
 (1, '5421865', 'pass1', 10, 'male', 'yes', NULL),
+(1, '6255575', 'Mr.PotatoeHead', 123, 'male', NULL, NULL),
 (1, '6980157', 'roshan', 20, 'male', 'yes', NULL),
+(1, '8278608', 'Mr.PotatoeHead', 51, 'male', NULL, NULL),
 (1, '8503285', 'aadith_name', 10, 'male', 'yes', '10001000'),
 (2, '1669050', 'berti harry', 45, 'female', 'yes', NULL),
 (2, '2369143', 'blah', 51, 'male', 'yes', NULL),
@@ -230,6 +255,7 @@ INSERT INTO `passengers` (`passenger_id`, `pnr`, `name`, `age`, `gender`, `meal_
 -- Table structure for table `payment_details`
 --
 
+DROP TABLE IF EXISTS `payment_details`;
 CREATE TABLE `payment_details` (
   `payment_id` varchar(20) NOT NULL,
   `pnr` varchar(15) DEFAULT NULL,
@@ -243,18 +269,22 @@ CREATE TABLE `payment_details` (
 --
 
 INSERT INTO `payment_details` (`payment_id`, `pnr`, `payment_date`, `payment_amount`, `payment_mode`) VALUES
-('120000248', '4797983', '2017-11-25', 4200, 'credit card'),
-('142539461', '3773951', '2017-11-25', 4050, 'credit card'),
-('165125569', '8503285', '2017-11-25', 7500, 'net banking'),
-('467972527', '2369143', '2017-11-26', 33400, 'debit card'),
-('557778944', '6980157', '2017-11-26', 11700, 'credit card'),
-('620041544', '1669050', '2017-11-25', 4800, 'debit card'),
-('665360715', '5421865', '2017-11-28', 15750, 'net banking'),
-('862686553', '3027167', '2017-11-25', 10700, 'debit card');
+('120000248', '4797983', '2021-05-05', 4200, 'credit card'),
+('142539461', '3773951', '2021-05-05', 4050, 'credit card'),
+('165125569', '8503285', '2021-05-05', 7500, 'net banking'),
+('430254452', '4570873', '2021-05-03', 5850, 'credit card'),
+('467972527', '2369143', '2021-06-04', 33400, 'debit card'),
+('557778944', '6980157', '2021-06-10', 11700, 'credit card'),
+('620041544', '1669050', '2021-07-04', 4800, 'debit card'),
+('665360715', '5421865', '2021-07-04', 15750, 'net banking'),
+('862686553', '3027167', '2021-07-04', 10700, 'debit card'),
+('884812745', '4783875', '2021-05-03', 8350, 'credit card'),
+('940829308', NULL, '2021-05-03', 40, 'credit card');
 
 --
 -- Triggers `payment_details`
 --
+DROP TRIGGER IF EXISTS `update_ticket_after_payment`;
 DELIMITER $$
 CREATE TRIGGER `update_ticket_after_payment` AFTER INSERT ON `payment_details` FOR EACH ROW UPDATE ticket_details
      SET booking_status='CONFIRMED', payment_id= NEW.payment_id
@@ -268,6 +298,7 @@ DELIMITER ;
 -- Table structure for table `ticket_details`
 --
 
+DROP TABLE IF EXISTS `ticket_details`;
 CREATE TABLE `ticket_details` (
   `pnr` varchar(15) NOT NULL,
   `date_of_reservation` date DEFAULT NULL,
@@ -288,20 +319,23 @@ CREATE TABLE `ticket_details` (
 --
 
 INSERT INTO `ticket_details` (`pnr`, `date_of_reservation`, `flight_no`, `journey_date`, `class`, `booking_status`, `no_of_passengers`, `lounge_access`, `priority_checkin`, `insurance`, `payment_id`, `customer_id`) VALUES
-('1669050', '2017-11-25', 'AA104', '2017-12-04', 'business', 'CONFIRMED', 3, 'yes', 'yes', 'yes', '620041544', 'harryroshan'),
-('2369143', '2017-11-26', 'AA101', '2017-12-01', 'business', 'CONFIRMED', 4, 'yes', 'yes', 'yes', '467972527', 'blah'),
-('3027167', '2017-11-25', 'AA101', '2017-12-01', 'economy', 'CONFIRMED', 2, 'no', 'no', 'yes', '862686553', 'aadith'),
-('3773951', '2017-11-25', 'AA104', '2017-12-04', 'economy', 'CONFIRMED', 3, 'yes', 'yes', 'yes', '142539461', 'aadith'),
-('4797983', '2017-11-25', 'AA104', '2017-12-04', 'business', 'CONFIRMED', 3, 'yes', 'no', 'yes', '120000248', 'harryroshan'),
-('5421865', '2017-11-28', 'AA101', '2017-12-01', 'economy', 'CONFIRMED', 3, 'no', 'no', 'no', '665360715', 'harryroshan'),
-('6980157', '2017-11-26', 'AA101', '2017-12-01', 'economy', 'CANCELED', 2, 'yes', 'yes', 'yes', '557778944', 'aadith'),
-('8503285', '2017-11-25', 'AA102', '2017-12-01', 'business', 'CONFIRMED', 2, 'yes', 'yes', 'no', '165125569', 'aadith');
+('1669050', '2021-05-05', 'AA104', '2021-05-10', 'business', 'CONFIRMED', 3, 'yes', 'yes', 'yes', '620041544', 'harryroshan'),
+('2369143', '2021-05-06', 'AA101', '2021-05-05', 'business', 'CONFIRMED', 4, 'yes', 'yes', 'yes', '467972527', 'blah'),
+('3027167', '2021-05-05', 'AA101', '2021-05-10', 'economy', 'CONFIRMED', 2, 'no', 'no', 'yes', '862686553', 'aadith'),
+('3773951', '2021-06-05', 'AA104', '2021-07-04', 'economy', 'CONFIRMED', 3, 'yes', 'yes', 'yes', '142539461', 'aadith'),
+('4570873', '2021-05-03', 'AA197', '2021-05-04', 'economy', 'CONFIRMED', 1, 'yes', 'yes', 'yes', '430254452', 'blah'),
+('4783875', '2021-05-03', 'AA197', '2021-05-04', 'business', 'CANCELED', 1, 'yes', 'yes', 'yes', '884812745', 'aadith'),
+('4797983', '2021-06-05', 'AA104', '2021-07-04', 'business', 'CONFIRMED', 3, 'yes', 'no', 'yes', '120000248', 'harryroshan'),
+('5421865', '2021-07-01', 'AA101', '2021-08-01', 'economy', 'CONFIRMED', 3, 'no', 'no', 'no', '665360715', 'harryroshan'),
+('6255575', '2021-05-03', 'AA197', '2021-05-04', 'economy', 'PENDING', 1, NULL, NULL, NULL, NULL, 'Apple'),
+('6980157', '2021-07-02', 'AA101', '2021-08-02', 'economy', 'CANCELED', 2, 'yes', 'yes', 'yes', '557778944', 'aadith'),
+('8278608', '2021-05-03', 'AA197', '2021-05-04', 'economy', 'PENDING', 1, NULL, NULL, NULL, NULL, 'kris'),
+('8503285', '2021-07-02', 'AA102', '2021-08-03', 'business', 'CONFIRMED', 2, 'yes', 'yes', 'no', '165125569', 'aadith');
 
 --
 -- Indexes for dumped tables
 --
-ALTER TABLE `parking_details`
-  ADD PRIMARY KEY (`spot_no`);
+
 --
 -- Indexes for table `admin`
 --
@@ -333,6 +367,12 @@ ALTER TABLE `frequent_flier_details`
 --
 ALTER TABLE `jet_details`
   ADD PRIMARY KEY (`jet_id`);
+
+--
+-- Indexes for table `parking_details`
+--
+ALTER TABLE `parking_details`
+  ADD PRIMARY KEY (`spot_no`);
 
 --
 -- Indexes for table `passengers`
@@ -387,13 +427,6 @@ ALTER TABLE `passengers`
 --
 ALTER TABLE `payment_details`
   ADD CONSTRAINT `payment_details_ibfk_1` FOREIGN KEY (`pnr`) REFERENCES `ticket_details` (`pnr`) ON UPDATE CASCADE;
-
---
--- Constraints for table `ticket_details`
---
-ALTER TABLE `ticket_details`
-  ADD CONSTRAINT `ticket_details_ibfk_2` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ticket_details_ibfk_3` FOREIGN KEY (`flight_no`,`journey_date`) REFERENCES `flight_details` (`flight_no`, `departure_date`) ON DELETE SET NULL ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

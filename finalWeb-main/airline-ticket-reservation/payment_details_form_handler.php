@@ -17,8 +17,16 @@
 				$payment_id=$_SESSION['payment_id'];
 				$total_amount=$_SESSION['total_amount'];
 				$payment_date=$_SESSION['payment_date'];
-				$payment_mode=$_POST['payment_mode'];				
-
+				$payment_mode=$_POST['payment_mode'];
+				$card_number=$_POST['card_number'];
+				$card_name=$_POST['u_name'];
+				$billing_address=$_POST['b_Address'];
+				$shipping_address=$_POST['s_Address'];
+				$phone_number=$_POST['p_Number'];
+				$security_code=$_POST['s_code'];
+				$Exp_month=$_POST['month'];
+				$Exp_year=$_POST['Year'];
+				// $card_type=$_POST['card_type'];
 				require_once('Database Connection file/mysqli_connect.php');
 				if($class=='economy')
 				{
@@ -50,9 +58,9 @@
 				{
 					echo "Successfully Updated Seats<br>";
 
-					$query="INSERT INTO Payment_Details (payment_id,pnr,payment_date,payment_amount,payment_mode) VALUES (?,?,?,?,?)";
+					$query="INSERT INTO Payment_Details (payment_id,pnr,payment_date,payment_amount,payment_mode,card_name,card_number,billing_address,phone_number, shipping_address, security_code) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 					$stmt=mysqli_prepare($dbc,$query);
-					mysqli_stmt_bind_param($stmt,"sssis",$payment_id,$pnr,$payment_date,$total_amount,$payment_mode);
+					mysqli_stmt_bind_param($stmt,"sssissssisi",$payment_id,$pnr,$payment_date,$total_amount,$payment_mode,$card_name, $card_number, $billing_address,$phone_number,$shipping_address, $security_code);
 					mysqli_stmt_execute($stmt);
 					$affected_rows_2=mysqli_stmt_affected_rows($stmt);
 					echo $affected_rows_2.'<br>';

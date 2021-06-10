@@ -13,6 +13,9 @@
 				background-image: url('slide1.jpeg');
 				text-align:center;
 			}
+			a{
+				font-size:25px;
+			}
 			input {
     			border: 1.5px solid #030337;
     			border-radius: 4px;
@@ -53,7 +56,6 @@
 					<li><a href="customer_homepage.php"><i class="fa fa-desktop" aria-hidden="true"></i> Dashboard</a></li>
 		
 				<li><a href="logout_handler.php"><i class="fa fa-sign-in" aria-hidden="true"></i> Log Out</a></li>
-				<li><a href="home_page.php"><i class="fa fa-address-book" aria-hidden="true"></i> About Us</a></li>
 			</ul>
 			</li>
 			</ul>
@@ -120,7 +122,7 @@
 				</tr>
 			</table>
 			<br>
-			<input type="submit" value="Search for Available Flights" name="Search">
+			<input type="submit" value="SEARCH FOR AVAILABLE FLIGHTS" name="Search">
 		</form>
 	
 	</body>

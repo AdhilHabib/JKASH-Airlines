@@ -6,7 +6,22 @@
 		<title>
 			Enter Payment Details
 		</title>
+				<link rel="stylesheet" type="text/css" href="main.css"/>
+		<link rel="stylesheet" href="font-awesome-4.7.0\css\font-awesome.min.css">
 		<style>
+		a{
+			font-size:25px;
+		}
+		*{
+				text-align:center;
+		}
+		html{
+			  background: url(slide5.jpg) no-repeat center center fixed;
+			  -webkit-background-size: cover;
+			  -moz-background-size: cover;
+			  -o-background-size: cover;
+			  background-size: cover;
+		}
 			input {
     			border: 1.5px solid #030337;
     			border-radius: 4px;
@@ -20,20 +35,14 @@
     			margin: 0px 357px
 			}
 		</style>
-		<link rel="stylesheet" type="text/css" href="css/style.css"/>
-		<link rel="stylesheet" href="font-awesome-4.7.0\css\font-awesome.min.css">
+
 	</head>
 	<body>
-		<img class="logo" src="images/shutterstock_22.jpg"/> 
-		<h1 id="title">
-			AADITH AIRLINES
-		</h1>
 		<div>
 			<ul>
 				<li><a href="home_page.php"><i class="fa fa-home" aria-hidden="true"></i> Home</a></li>
 				<li><a href="customer_homepage.php"><i class="fa fa-desktop" aria-hidden="true"></i> Dashboard</a></li>
-				<li><a href="home_page.php"><i class="fa fa-plane" aria-hidden="true"></i> About Us</a></li>
-				<li><a href="home_page.php"><i class="fa fa-phone" aria-hidden="true"></i> Contact Us</a></li>
+				<li><a href="home_page.php"><i class="fa fa-address-book" aria-hidden="true"></i> About Us</a></li>
 				<li><a href="logout_handler.php"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
 			</ul>
 		</div>
@@ -45,33 +54,33 @@
 				$payment_id=rand(100000000,999999999);
 				$pnr=$_SESSION['pnr'];
 				$_SESSION['payment_id']=$payment_id;
-				$payment_date=date('Y-m-d'); 
+				$payment_date=date('Y-m-d');
 				$_SESSION['payment_date']=$payment_date;
 				$_SESSION['select_parking'] = $parking_no;
 				$days_no = $_POST['no_of_days'];
 
 				require_once('Database Connection file/mysqli_connect.php');
-				
+
 					$query="SELECT price FROM parking_details where spot_no=?";
 					$stmt=mysqli_prepare($dbc,$query);
 					mysqli_stmt_bind_param($stmt,"s",$parking_no);
 					mysqli_stmt_execute($stmt);
 					mysqli_stmt_bind_result($stmt,$ticket_price);
 					mysqli_stmt_fetch($stmt);
-				
-				
+
+
 				mysqli_stmt_close($stmt);
 				mysqli_close($dbc);
 				$total_ticket_price=$ticket_price *$days_no;
-				
-				
+
+
 				$total_amount=$total_ticket_price;
 				$_SESSION['total_amount']=$total_amount;
 
 				echo "<table cellpadding=\"5\"	style='margin-left: 50px'>";
 				echo "<tr>";
 				echo "<td class=\"fix_table\">Parking Fee:</td>";
-				echo "<td class=\"fix_table\">&#x20b9; ".$total_ticket_price."</td>";
+				echo "<td class=\"fix_table\">&#x24; ".$total_ticket_price."</td>";
 				echo "</tr>";
 
 				echo "</table>";
@@ -80,12 +89,12 @@
 				echo "<table cellpadding=\"5\" style='margin-left: 50px'>";
 				echo "<tr>";
 				echo "<td class=\"fix_table\"><strong>Total:</strong></td>";
-				echo "<td class=\"fix_table\">&#x20b9; ".$total_amount."</td>";
+				echo "<td class=\"fix_table\">&#x24; ".$total_amount."</td>";
 				echo "</tr>";
 				echo "</table>";
 				echo "<hr style='margin-right:900px; margin-left: 50px'>";
 				echo "<br>";
-				echo "<p style=\"margin-left:50px\">Your ticket number is <strong>".$payment_id.".</strong> Please note it down to show booth operator.</p>";
+				echo "<p style=\"margin-left:50px\">Your Payment/Transaction ID is <strong>".$payment_id.".</strong> Please note it down for future reference.</p>";
 				echo "<br>";
 			?>
 			<table cellpadding="5" style='margin-left: 50px'>
@@ -101,14 +110,6 @@
 			<br>
 			<input type="submit" value="Pay Now" name="Pay_Now">
 		</form>
-		<!-- 
-•	Booking_Status
-•	Payment_ID -->
 
-		<!--Following data fields were empty!
-			...
-			ADD VIEW FLIGHT DETAILS AND VIEW JETS/ASSETS DETAILS for ADMIN
-			PREDEFINED LOCATION WHEN BOOKING TICKETS
-		-->
 	</body>
 </html>
